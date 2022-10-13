@@ -8,25 +8,17 @@ var board = AppGrid(BOARD_SIZE, NUMBER_OF_MINES);
 var mineAmount = document.querySelector("[data-mine-count");
 var subtext = document.querySelector(".subtext");
 mineAmount.textContent = "".concat(NUMBER_OF_MINES);
-console.log(board);
 boardElement.style.setProperty("--size", "".concat(BOARD_SIZE));
 board.forEach(function (row) {
     row.forEach(function (tile) {
         if (boardElement) {
             boardElement.append(tile.element);
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
             tile.element.addEventListener("click", function () {
                 revealTile(board, tile);
                 checkWinLose(board);
             });
             tile.element.addEventListener("contextmenu", function (e) {
                 e.preventDefault();
-                console.log(tile);
-                // const markedTilesCount = row.filter((p) => p.status === "marked").length;
-                // console.log(markedTilesCount);
-                // if (markedTilesCount > NUMBER_OF_MINES) {
-                //   return;
-                // }
                 if (MarkedTiles < NUMBER_OF_MINES || tile.status === "marked") {
                     MarkTile(tile);
                     MarkedTiles = board.reduce(function (count, row) {
@@ -42,7 +34,6 @@ board.forEach(function (row) {
 var checkWinLose = function (board) {
     var win = checkWin(board);
     var lose = checkLose(board);
-    console.log(lose + "lose");
     if (win || lose) {
         boardElement.addEventListener("click", function (e) {
             e.stopImmediatePropagation();

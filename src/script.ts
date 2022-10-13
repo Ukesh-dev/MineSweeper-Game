@@ -19,14 +19,12 @@ const subtext = document.querySelector(".subtext");
 
 mineAmount.textContent = `${NUMBER_OF_MINES}`;
 
-console.log(board);
 boardElement.style.setProperty("--size", `${BOARD_SIZE}`);
 
 board.forEach((row) => {
   row.forEach((tile) => {
     if (boardElement) {
       boardElement.append(tile.element);
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
       tile.element.addEventListener("click", () => {
         revealTile(board, tile);
         checkWinLose(board);
@@ -34,13 +32,6 @@ board.forEach((row) => {
 
       tile.element.addEventListener("contextmenu", (e) => {
         e.preventDefault();
-        console.log(tile);
-        // const markedTilesCount = row.filter((p) => p.status === "marked").length;
-        // console.log(markedTilesCount);
-
-        // if (markedTilesCount > NUMBER_OF_MINES) {
-        //   return;
-        // }
         if (MarkedTiles < NUMBER_OF_MINES || tile.status === "marked") {
           MarkTile(tile);
           MarkedTiles = board.reduce((count: number, row) => {
@@ -57,7 +48,6 @@ board.forEach((row) => {
 const checkWinLose = (board: Row[][]) => {
   const win = checkWin(board);
   const lose = checkLose(board);
-  console.log(lose + "lose");
 
   if (win || lose) {
     boardElement.addEventListener(

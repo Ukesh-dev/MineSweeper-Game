@@ -8,25 +8,16 @@ var STATUS;
 export function AppGrid(boardSize, numberOfMines) {
     var board = [];
     var minePositions = getMinePositions(boardSize, numberOfMines);
-    console.log(minePositions);
     Array.from({ length: boardSize }, function (_r, x) {
         var rowElement = [];
-        //   const rowElement: Row[] = [];
         Array.from({ length: boardSize }, function (_c, y) {
             var element = document.createElement("div");
-            // * Not needed cause of getters and setters
             element.dataset.status = "hidden";
             var tile = {
                 element: element,
                 x: x,
                 y: y,
                 mine: minePositions.some(positionMatch.bind(null, { x: x, y: y })),
-                getNewStat: function () {
-                    return this.x + this.y;
-                },
-                // set newStatus(value: string) {
-                //   [this.firstName, this.lastName] = value.split("");
-                // },
                 get status() {
                     return this.element.dataset.status;
                 },
@@ -34,13 +25,11 @@ export function AppGrid(boardSize, numberOfMines) {
                     this.element.dataset.status = value;
                 },
             };
-            //   tile.newStatus = "hell";
             rowElement.push(tile);
         });
         board.push(rowElement);
     });
     return board;
-    //   return board;
 }
 export var checkWin = function (board) {
     return board.every(function (row) {
@@ -65,7 +54,6 @@ export var revealTile = function (board, tile) {
         return;
     }
     tile.status = STATUS.NUMBER;
-    //   console.log(board);
     var adjacentTiles = nearbyTiles(board, tile);
     var mineCount = adjacentTiles.filter(function (p) { return p.mine; }).length;
     if (mineCount > 0) {
@@ -88,10 +76,7 @@ var nearbyTiles = function (board, _a) {
     }
     return tiles;
 };
-export var MarkTile = function (tile
-//   row: Row
-) {
-    //   console.log(tile.x);
+export var MarkTile = function (tile) {
     if (tile.status !== STATUS.HIDDEN && tile.status !== STATUS.MARKED) {
         return;
     }
@@ -104,13 +89,11 @@ export var MarkTile = function (tile
 };
 function getMinePositions(boardSize, numberOfMines) {
     var positions = [];
-    console.log(numberOfMines);
     var _loop_1 = function () {
         var position = {
             x: Math.floor(Math.random() * boardSize),
             y: Math.floor(Math.random() * boardSize),
         };
-        // console.log(!positions.some((p) => positionMatch(p, position)));
         if (!positions.some(function (p) { return positionMatch(p, position); })) {
             positions.push(position);
         }
@@ -122,8 +105,4 @@ function getMinePositions(boardSize, numberOfMines) {
 }
 function positionMatch(a, b) {
     return a.x === b.x && a.y === b.y;
-}
-var arrays = [1, 2];
-if (!arrays.some(function (a) { return a === a + 1; })) {
-    console.log(arrays.some(function (a) { return a === a; }));
 }

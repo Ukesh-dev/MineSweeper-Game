@@ -10,39 +10,22 @@ export interface Row {
   element: HTMLDivElement;
   y: number;
   mine: boolean;
-  getNewStat: () => void;
   status: string | undefined;
 }
 
 export function AppGrid(boardSize: number, numberOfMines: number) {
   const board: Row[][] = [];
   const minePositions = getMinePositions(boardSize, numberOfMines);
-  console.log(minePositions);
   Array.from({ length: boardSize }, (_r, x) => {
     const rowElement: Row[] = [];
-    //   const rowElement: Row[] = [];
     Array.from({ length: boardSize }, (_c, y) => {
       const element = document.createElement("div");
-      // * Not needed cause of getters and setters
       element.dataset.status = "hidden";
-      const tile: {
-        x: number;
-        element: HTMLDivElement;
-        y: number;
-        mine: boolean;
-        getNewStat: () => void;
-        status: string | undefined;
-      } = {
+      const tile: Row = {
         element,
         x,
         y,
         mine: minePositions.some(positionMatch.bind(null, { x, y })),
-        getNewStat() {
-          return this.x + this.y;
-        },
-        // set newStatus(value: string) {
-        //   [this.firstName, this.lastName] = value.split("");
-        // },
 
         get status() {
           return this.element.dataset.status;
@@ -51,13 +34,11 @@ export function AppGrid(boardSize: number, numberOfMines: number) {
           this.element.dataset.status = value;
         },
       };
-      //   tile.newStatus = "hell";
       rowElement.push(tile);
     });
     board.push(rowElement);
   });
   return board;
-  //   return board;
 }
 
 export const checkWin = (board: Row[][]) => {
@@ -85,7 +66,6 @@ export const revealTile = (board: Row[][], tile: Row) => {
     return;
   }
   tile.status = STATUS.NUMBER;
-  //   console.log(board);
   const adjacentTiles = nearbyTiles(board, tile);
   const mineCount = adjacentTiles.filter((p) => p.mine).length;
   if (mineCount > 0) {
@@ -105,18 +85,7 @@ const nearbyTiles = (board: Row[][], { x, y }: Row) => {
   return tiles;
 };
 
-export const MarkTile = (
-  tile: {
-    x: number;
-    element: HTMLDivElement;
-    y: number;
-    mine: boolean;
-    getNewStat: () => void;
-    status: string | undefined;
-  }
-  //   row: Row
-) => {
-  //   console.log(tile.x);
+export const MarkTile = (tile: Row) => {
   if (tile.status !== STATUS.HIDDEN && tile.status !== STATUS.MARKED) {
     return;
   }
@@ -129,14 +98,12 @@ export const MarkTile = (
 
 function getMinePositions(boardSize: number, numberOfMines: number) {
   const positions: Position[] = [];
-  console.log(numberOfMines);
 
   while (positions.length < numberOfMines) {
     const position: Position = {
       x: Math.floor(Math.random() * boardSize),
       y: Math.floor(Math.random() * boardSize),
     };
-    // console.log(!positions.some((p) => positionMatch(p, position)));
     if (!positions.some((p) => positionMatch(p, position))) {
       positions.push(position);
     }
@@ -150,10 +117,4 @@ type Position = {
 
 function positionMatch(a: Position, b: Position) {
   return a.x === b.x && a.y === b.y;
-}
-
-const arrays = [1, 2];
-
-if (!arrays.some((a) => a === a + 1)) {
-  console.log(arrays.some((a) => a === a));
 }
